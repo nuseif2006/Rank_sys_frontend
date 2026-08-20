@@ -1,35 +1,37 @@
 "use client"
 import Link from 'next/link'
-import Button from '../components/customButton'
-import Input from '../components/customInput'
 import { ChangeEvent, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
+import btnRegister from '../components/register'
+import fetchReg from '../components/register'
+import { useRouter } from 'next/navigation'
 
-const registerPage = () => {
+const register = () => {
+  const router = useRouter()
   const [fname, setFname] = useState("")
   const [lname, setLname] = useState("")
   const [email, setEmail] = useState("")
   const [pass, setPass] = useState("")
   const [cpass, setCpass] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const Register = () => {
+  const Register = async () => {
     if (fname == "" || lname == "" || email == "" || pass == "" || cpass == ""){
-      return toast.error("Fill all the fields")
+        return toast.error("Fill all the fields")
     }
     else if (pass != cpass){
-      return toast.error("Password not equal")
+        return toast.error("Password not equal")
     }
     else if (!email.includes("@gmail.com")){
-      return toast.error("Email should be in correct format")
+        return toast.error("Email should be in correct format")
     }
-    fetch("http://localhost:5000/register", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({fname, lname, email, pass})
-    })
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .catch(() => toast.error("Connection timed-out"))
+    const res = await fetchReg({fname, lname, email, pass})
+    if (res.success){
+      router.push("/")
+      return toast.success(res.message)
+    }
+    else{
+      return toast.error(res.message)
+    }
   }
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -45,20 +47,23 @@ const registerPage = () => {
       <div className="card-body">
         <fieldset className="fieldset">
           <label className="label">First Name</label>
-          <Input
-          pholder={"John"}
+          <input
+          className='input w-full'
+          placeholder={"John"}
           value={fname}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setFname(e.target.value)}
           />
           <label className="label">Last Name</label>
-          <Input
-          pholder={"Doe"}
+          <input
+          className='input w-full'
+          placeholder={"Doe"}
           value={lname}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setLname(e.target.value)}
           />
            <label className="label">Email</label>
-          <Input
-          pholder={"mail@site.com"}
+          <input
+          className='input w-full'
+          placeholder={"mail@site.com"}
           type={"email"}
           value={email}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -66,9 +71,10 @@ const registerPage = () => {
           <label className="label">Password</label>
         
         <div className="relative">
-          <Input
+          <input
+          className='input w-full'
           type={showPassword ? "text" : "password"}
-          pholder={"Password"}
+          placeholder={"Password"}
           value={pass}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setPass(e.target.value)}
           />
@@ -97,8 +103,8 @@ const registerPage = () => {
           ) : (
             /* Eye Icon (Show) */
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
@@ -120,9 +126,10 @@ const registerPage = () => {
         </div>
           <label className="label">Confirm Password</label>
         <div className="relative">
-          <Input
+          <input
+          className='input w-full'
           type={showPassword ? "text": "password"}
-          pholder={"Password"}
+          placeholder={"Password"}
           value={cpass}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setCpass(e.target.value)}
           />
@@ -173,10 +180,12 @@ const registerPage = () => {
         </button>
         </div>
         <div className='aura mt-4'>
-          <Button
+          <button
+          className='btn w-full'
           onClick={Register}
-          text={"Register"}
-          />
+          >
+            Register
+          </button>
         </div>
           <Link href={"/"} className="my-3 mx-1">Already have an account? Login</Link>
         </fieldset>
@@ -188,4 +197,4 @@ const registerPage = () => {
   )
 }
 
-export default registerPage
+export default register
