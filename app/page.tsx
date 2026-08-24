@@ -100,7 +100,7 @@ refine your skills in real-time.
                     )}
                   </button>
                   </div>
-          <div><a className="link link-hover">Forgot password?</a></div>
+          <div><Link href={"/forgot"} className="my-3 mx-1">Forgot password?</Link></div>
 <div className='aura mt-4'>
           <button
           className='btn w-full'

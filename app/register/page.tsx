@@ -26,7 +26,7 @@ const register = () => {
     }
     const res = await fetchReg({fname, lname, email, pass})
     if (res.success){
-      router.push("/")
+      router.back()
       return toast.success(res.message)
     }
     else{
