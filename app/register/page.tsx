@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 
 const register = () => {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const [fname, setFname] = useState("")
   const [lname, setLname] = useState("")
   const [email, setEmail] = useState("")
@@ -15,21 +16,27 @@ const register = () => {
   const [cpass, setCpass] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const Register = async () => {
+    setLoading(true)
     if (fname == "" || lname == "" || email == "" || pass == "" || cpass == ""){
+        setLoading(false)
         return toast.error("Fill all the fields")
     }
     else if (pass != cpass){
+        setLoading(false)
         return toast.error("Password not equal")
     }
     else if (!email.includes("@gmail.com")){
+        setLoading(false)
         return toast.error("Email should be in correct format")
     }
     const res = await fetchReg({fname, lname, email, pass})
     if (res.success){
+      setLoading(false)
       router.back()
       return toast.success(res.message)
     }
     else{
+      setLoading(false)
       return toast.error(res.message)
     }
   }
@@ -179,6 +186,16 @@ const register = () => {
           )}
         </button>
         </div>
+
+        {loading ?  
+        <button
+          className='btn w-full mt-4'
+          disabled
+          >
+            Register
+            <span className='loading loading-spinner'></span>
+          </button>
+        :
         <div className='aura mt-4'>
           <button
           className='btn w-full'
@@ -186,7 +203,7 @@ const register = () => {
           >
             Register
           </button>
-        </div>
+        </div>}
           <Link href={"/"} className="my-3 mx-1">Already have an account? Login</Link>
         </fieldset>
       </div>

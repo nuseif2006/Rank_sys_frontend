@@ -6,15 +6,22 @@ import { useRouter } from "next/navigation"
 
 const forgot = () => {
     const route = useRouter()
+    const [loading, setLoading] = useState(false)
     const [email, setEmail] = useState("")
     const Reset = async () => {
-        if (!email.includes("@gmail.com")) return toast.error("Email should be in correct format")
+        setLoading(true)
+        if (!email.includes("@gmail.com")) {
+          setLoading(false)
+          return toast.error("Email should be in correct format")
+        }
         const res = await Forgot({email})
         if (res.success){
+            setLoading(false)
             toast.success(res.message)
             route.back()
         }
         else{
+            setLoading(false)
             toast.error(res.message)
         }
     }
@@ -35,14 +42,24 @@ const forgot = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             required
            />
-<div className='aura mt-4'>
+        {loading ?
           <button
-          className='btn w-full'
-          onClick={Reset}
+          className='btn w-full mt-4'
+          disabled
           >
             Reset
+            <span className="loading loading-spinner"></span>
           </button>
-        </div> 
+          :
+          <div className='aura mt-4'>
+            <button
+            className='btn w-full'
+            onClick={Reset}
+            >
+              Reset
+            </button>
+          </div> 
+        }
         </fieldset>
       </div>
     </div>

@@ -11,8 +11,7 @@ const taskFetch = async () => {
             headers: {
                 "Authorization": `Bearer ${sessionCookie?.value}`,
                 "Content-Type": "application/json"
-            },
-            cache: "no-store"
+            }
         })
         if (!res.ok) return {success: false, message: "Error occured"}
         const data = await res.json()

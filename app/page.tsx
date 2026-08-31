@@ -7,19 +7,29 @@ import btnLogin from "./components/login";
 
 export default function Home() {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const Login = async () => {
-      if (email == "" || pass == "") return toast.error("Fill all the fields")
-      if (!email.includes("@gmail.com")) return toast.error("Email should be in correct format")
+      setLoading(true)
+      if (email == "" || pass == "") {
+        setLoading(false)
+        return toast.error("Fill all the fields")
+      }
+      else if (!email.includes("@gmail.com")) {
+        setLoading(false)
+        return toast.error("Email should be in correct format")
+      }
       const res = await btnLogin({email, pass})
       if (res.success){
         toast.success(res.message)
         localStorage.setItem("data", "task")
+        setLoading(false)
         return router.replace("/task")
       }
       else{
+        setLoading(false)
         return toast.error(res.message)
       }
     }
@@ -101,14 +111,25 @@ refine your skills in real-time.
                   </button>
                   </div>
           <div><Link href={"/forgot"} className="my-3 mx-1">Forgot password?</Link></div>
-<div className='aura mt-4'>
+        {loading ? 
+          <button
+          className='btn w-full mt-4'
+          disabled
+          >
+            Login
+            <span className="loading loading-spinner"></span>
+          </button>
+          :
+          <div className='aura mt-4'>
           <button
           className='btn w-full'
           onClick={Login}
           >
             Login
           </button>
-        </div>          <Link href={"/register"} className="my-3 mx-1">Don't have an account? Register</Link>
+        </div> 
+        }         
+        <Link href={"/register"} className="my-3 mx-1">Don't have an account? Register</Link>
         </fieldset>
       </div>
     </div>
