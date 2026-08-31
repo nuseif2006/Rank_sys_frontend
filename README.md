@@ -1,1 +1,3 @@
+**  npm install **
 
+**  npm start  **
