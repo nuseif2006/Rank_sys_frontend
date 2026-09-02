@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import btnLogin from "./components/login";
 import Image from "next/image";
@@ -36,6 +36,16 @@ export default function Home() {
       return toast.error(res.message)
     }
   }
+
+  useEffect(()=>{
+    const data = localStorage.getItem("data")
+    if (data == null){
+      return router.replace("/")
+    }
+    else{
+      return router.replace("/task")
+    }
+  },[])
 
   return (
     <main className="relative min-h-screen w-full">

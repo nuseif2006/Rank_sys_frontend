@@ -4,16 +4,24 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation" // Import for navigation
 import taskFetch from "../components/taskfetch"
 import Header from '../components/header'
+import toast, { Toaster } from "react-hot-toast"
 
 const TaskPage = () => {
   const router = useRouter()
   const [tasks, setTasks] = useState([])
   const [empty, setEmpty] = useState(false)
-
-  
-
-
-
+  useEffect(()=>{
+    const fetchTasks = async () => {
+      const res = await taskFetch()
+      if(!res.success){
+        localStorage.removeItem("data")
+        router.replace("/")
+        toast.error("Something went wrong", {id: "auth-error"})
+        return
+      }
+    }
+    fetchTasks()
+  },[])
   return (
     <main>
       <Header/>
@@ -54,6 +62,7 @@ const TaskPage = () => {
         )} */}
       </ul>
     </div>
+    <Toaster/>
         </main>
   )
 }

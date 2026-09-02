@@ -96,6 +96,7 @@ const Header = () => {
       <button onClick={() => (document.getElementById("my_modal_3") as HTMLDialogElement).close()} className="btn btn-neutral">Cancel</button>
       <button onClick={async() => {
         await removeCookies()
+        localStorage.removeItem("data")
         return router.replace("/")
       }} className="btn btn-error mx-10">Logout</button>
     </div>
