@@ -33,7 +33,7 @@ export default function Home() {
     }
     else{
       setLoading(false)
-      return toast.error(res.message)
+      return toast.error(res.message, {id: "error3"})
     }
   }
 

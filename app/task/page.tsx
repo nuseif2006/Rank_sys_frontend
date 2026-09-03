@@ -8,8 +8,15 @@ import toast, { Toaster } from "react-hot-toast"
 
 const TaskPage = () => {
   const router = useRouter()
-  const [tasks, setTasks] = useState([])
-  const [empty, setEmpty] = useState(false)
+  const [submit, setSubmit] = useState(false)
+  interface Task {
+  id: string | number;
+  txt: string;
+  exp: number;
+  completed: boolean;
+  }
+  const [tasks, setTasks] = useState<Task[]>([])
+
   useEffect(()=>{
     const fetchTasks = async () => {
       const res = await taskFetch()
@@ -18,23 +25,35 @@ const TaskPage = () => {
         toast.error("Something went wrong", {id: "auth-error"})
         return
       }
+      const formattedTasks = (res.message || []).map((task:any) => ({
+        ...task,
+        completed: task.completed || false,
+      }))
+      setTasks(formattedTasks)
     }
     fetchTasks()
   },[])
+  const handleToggle = (id:any) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    )
+  }
   return (
     <main>
       <Header/>
     <div className="space-y-4 mt-30">
+      {submit ?
+      <button onClick={() => router.push("/rankboard")} className="btn block mx-auto">Go to Leaderboard</button>
+      :
       <ul className="list bg-base-100 rounded-box shadow-md">
         <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
           Today's tasks
         </li>
-
-        {/* {empty ? (
-          <li className="p-4 text-error font-medium">404 An error occurred</li>
-        ) : (
-          tasks.map((item) => (
-            <li className="list-row flex items-center justify-between p-3" key={item.id}>
+        {
+          tasks.map((task) => (
+            <li className="list-row flex items-center justify-between p-3" key={task["id"]}>
               <div className="flex items-center gap-3">
                 <img
                   className="size-10 rounded-box"
@@ -42,24 +61,30 @@ const TaskPage = () => {
                   alt="Task thumbnail"
                 />
                 <div>
-                  <div className={item.completed ? "line-through opacity-50" : ""}>
-                    {item.txt}
+                  <div className={task.completed ? "line-through opacity-50" : ""}>
+                    {task["txt"]}
                   </div>
                   <div className="text-xs uppercase font-semibold opacity-60">
-                    {item.exp}
+                    {`${task["exp"]} exp`}
                   </div>
                 </div>
               </div>
               <input
                 type="checkbox"
-                checked={undefined}
+                checked={task.completed}
                 className="checkbox checkbox-primary"
-                onChange={undefined}
+                onChange={() => handleToggle(task.id)}
               />
             </li>
           ))
-        )} */}
+        }
+        {tasks.length > 0 && tasks.every((task) => task.completed) && (
+  <button className="btn btn-success" onClick={() => setSubmit(true)}>
+    Submit
+  </button>
+)}
       </ul>
+}
     </div>
     <Toaster/>
         </main>

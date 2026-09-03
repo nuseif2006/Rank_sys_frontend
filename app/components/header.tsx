@@ -53,6 +53,7 @@ const Header = () => {
   <div className="flex-1">
     <a onClick={() => window.location.reload()} className="btn btn-ghost text-xl">Haxsora</a>
   </div>
+      <button onClick={() => router.push("/rankboard")} className="btn btn-outline mr-20">LEADERBOARD</button>
       <p className="px-8">Welcome, {name}</p>
   <div className="flex-none p-2">
     <div className="dropdown dropdown-end">
