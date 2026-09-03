@@ -18,11 +18,11 @@ export default function Home() {
     setLoading(true)
     if (email == "" || pass == "") {
       setLoading(false)
-      return toast.error("Fill all the fields")
+      return toast.error("Fill all the fields",{id: "empty"})
     }
     else if (!email.includes("@gmail.com")) {
       setLoading(false)
-      return toast.error("Email should be in correct format")
+      return toast.error("Email should be in correct format",{id: "invalid-email"})
     }
     const res = await btnLogin({email, pass})
     if (res.success){
@@ -46,7 +46,6 @@ export default function Home() {
       return router.replace("/task")
     }
   },[])
-
   return (
     <main className="relative min-h-screen w-full">
       <div className="absolute inset-0 z-0">
@@ -141,7 +140,7 @@ export default function Home() {
                   </button>
                   :
                   <div className='aura mt-4'>
-                    <button className='btn w-full' onClick={Login}>
+                    <button className='btn w-full' onClick={Login} >
                       Login
                     </button>
                   </div> 

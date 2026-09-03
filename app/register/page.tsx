@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import fetchReg from '../components/register'
 import { useRouter } from 'next/navigation'
@@ -21,27 +21,37 @@ const Register = () => {
     setLoading(true)
     if (fname === "" || lname === "" || email === "" || pass === "" || cpass === ""){
         setLoading(false)
-        return toast.error("Fill all the fields")
+        return toast.error("Fill all the fields", {id: "empty"})
     }
     else if (pass !== cpass){
         setLoading(false)
-        return toast.error("Password not equal")
+        return toast.error("Password not equal", {id: "invalid-password"})
     }
     else if (!email.includes("@gmail.com")){
         setLoading(false)
-        return toast.error("Email should be in correct format")
+        return toast.error("Email should be in correct format", {id: "invalid-email"})
     }
     const res = await fetchReg({fname, lname, email, pass})
     if (res.success){
       setLoading(false)
       router.back()
-      return toast.success(res.message)
+      return toast.success(res.message, {id: "error"})
     }
     else{
       setLoading(false)
-      return toast.error(res.message)
+      return toast.error(res.message, {id: "error-2"})
     }
   }
+
+  useEffect(()=>{
+      const data = localStorage.getItem("data")
+      if (data == null){
+        return router.replace("/register")
+      }
+      else{
+        return router.replace("/task")
+      }
+  },[])
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden">

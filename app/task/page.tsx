@@ -14,7 +14,6 @@ const TaskPage = () => {
     const fetchTasks = async () => {
       const res = await taskFetch()
       if(!res.success){
-        localStorage.removeItem("data")
         router.replace("/")
         toast.error("Something went wrong", {id: "auth-error"})
         return

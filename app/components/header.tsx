@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import taskFetch from "./taskfetch"
 import removeCookies from "./removecookies"
+import Del from "./delete"
+import toast, { Toaster } from "react-hot-toast"
 
 const Header = () => {
     const router = useRouter()
@@ -28,6 +30,20 @@ const Header = () => {
     }
      fetchName()
     },[])
+
+    const Delete = async () => {
+      const res =await Del()
+      if (res.success){
+        await removeCookies()
+        localStorage.removeItem("data")
+        router.replace("/")
+        return toast.success(res.msg, {id: "success"})
+      }
+      else{
+        return toast.error(res.msg, {id: "error-2"})
+      }
+    }
+
   return (
       <div className="navbar shadow-sm">
   <div className="flex-1">
@@ -51,7 +67,7 @@ const Header = () => {
             Profile
           </a>
         </li>
-        <li><a>
+        <li><a onClick={() => (document.getElementById("settings") as HTMLDialogElement)?.showModal()}>
           Settings</a></li>
         <li><a onClick={() => (document.getElementById("my_modal_3") as HTMLDialogElement)?.showModal()}>
           Logout</a></li>
@@ -86,6 +102,23 @@ const Header = () => {
     <button>close</button>
   </form>
 </dialog>
+<dialog id="settings" className="modal">
+  <div className="modal-box">
+    <h3 className="font-bold text-lg">Settings</h3>
+    <button className="btn btn-error mt-10" popoverTarget="popover-1" style={{ anchorName: "--anchor-1" } /* as React.CSSProperties */}>
+  Delete Account
+</button>
+
+<ul className="dropdown menu w-52 rounded-box bg-base-300 shadow-sm"
+  popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */ }>
+  <li><a onClick={Delete}>Delete</a></li>
+  <li><a onClick={() => (document.getElementById("settings") as HTMLDialogElement).close()}>Cancel</a></li>
+</ul>
+  </div>
+  <form method="dialog" className="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box">
     <form method="dialog">
@@ -103,6 +136,7 @@ const Header = () => {
   </div>
 </dialog>
   </div>
+  <Toaster/>
 </div>
   )
 }

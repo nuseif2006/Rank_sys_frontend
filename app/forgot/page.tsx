@@ -12,17 +12,17 @@ const forgot = () => {
         setLoading(true)
         if (!email.includes("@gmail.com")) {
           setLoading(false)
-          return toast.error("Email should be in correct format")
+          return toast.error("Email should be in correct format",{id: "invalid-email"})
         }
         const res = await Forgot({email})
         if (res.success){
             setLoading(false)
-            toast.success(res.message)
+            toast.success(res.message, {id: "error"})
             route.back()
         }
         else{
             setLoading(false)
-            toast.error(res.message)
+            toast.error(res.message, {id: "error-2"})
         }
     }
   return (
