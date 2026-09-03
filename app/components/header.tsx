@@ -13,6 +13,7 @@ const Header = () => {
     const [fname, setFname] = useState("")
     const [lname, setLname] = useState("")
     const [email, setEmail] = useState("")
+    const [loading, setLoading] = useState(false)
     useEffect(()=>{
      async function fetchName(){
       const res= await taskFetch()
@@ -32,14 +33,17 @@ const Header = () => {
     },[])
 
     const Delete = async () => {
+      setLoading(true)
       const res =await Del()
       if (res.success){
+        setLoading(false)
         await removeCookies()
         localStorage.removeItem("data")
         router.replace("/")
         return toast.success(res.msg, {id: "success"})
       }
       else{
+        setLoading(false)
         return toast.error(res.msg, {id: "error-2"})
       }
     }
@@ -111,7 +115,16 @@ const Header = () => {
 
 <ul className="dropdown menu w-52 rounded-box bg-base-300 shadow-sm"
   popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */ }>
-  <li><a onClick={Delete}>Delete</a></li>
+  <li>
+    {loading ?
+      <a className="btn-disabled">
+        Delete
+        <span className="loading loading-spinner"></span>
+        </a>
+      :
+    <a onClick={Delete}>Delete</a>
+    }
+    </li>
   <li><a onClick={() => (document.getElementById("settings") as HTMLDialogElement).close()}>Cancel</a></li>
 </ul>
   </div>
