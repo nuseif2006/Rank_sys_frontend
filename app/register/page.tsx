@@ -43,16 +43,6 @@ const Register = () => {
     }
   }
 
-  useEffect(()=>{
-      const data = localStorage.getItem("data")
-      if (data == null){
-        return router.replace("/register")
-      }
-      else{
-        return router.replace("/task")
-      }
-  },[])
-
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image Layer */}

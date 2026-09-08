@@ -36,16 +36,6 @@ export default function Home() {
       return toast.error(res.message, {id: "error3"})
     }
   }
-
-  useEffect(()=>{
-    const data = localStorage.getItem("data")
-    if (data == null){
-      return router.replace("/")
-    }
-    else{
-      return router.replace("/task")
-    }
-  },[])
   return (
     <main className="relative min-h-screen w-full">
       <div className="absolute inset-0 z-0">
