@@ -36,13 +36,13 @@ export default function Home() {
       return toast.error(res.message, {id: "error3"})
     }
   }
-  // useEffect(()=>{
-  //     const maintenance = process.env.NEXT_PUBLIC_MAINTENANCE
-  //     if (maintenance){
-  //       router.replace("/maintenance")
-  //       return
-  //     }
-  // },[])
+  useEffect(()=>{
+      const maintenance = process.env.NEXT_PUBLIC_MAINTENANCE
+      if (maintenance){
+        router.replace("/maintenance")
+        return
+      }
+  },[])
   return (
     <main className="relative min-h-screen w-full">
       <div className="absolute inset-0 z-0">
