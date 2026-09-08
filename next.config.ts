@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   allowedDevOrigins: ["192.168.56.1"],
+  turbopack: {}
 };
 
 export default withPWA(nextConfig);

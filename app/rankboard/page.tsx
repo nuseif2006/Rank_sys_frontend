@@ -1,42 +1,34 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Cookies from "../components/cookies"
 import { useRouter } from "next/navigation"
 import { io, Socket } from "socket.io-client"
+import userFetch from "../components/userfetch"
+import toast, { Toaster } from "react-hot-toast"
 
 const rankBoard = () => {
   const router = useRouter()
   const [error, setError] = useState(false)
-  const [txt, setTxt] = useState("loading")
   useEffect(()=>{
-    async function getCookies(){
-      const cookie = await Cookies()
-      if (cookie.cookie == "404 USER NOT FOUND"){
-        router.push("/error")
-        setError(true)
+    const fetchUsers = async () => {
+      const res = await userFetch()
+      if(!res.success){
+        router.back()
+        toast.error("Something went wrong", {id: "auth-error5"})
         return
       }
-      const socket: Socket = io("http://localhost:5000", {
-        extraHeaders: {
-          Authorization: `Bearer ${cookie.cookie}`
-        },
-        transports: ["websocket", "polling"]
-      })
-      socket.on("nuseif", (data: string) => {
-        setTxt(data)
-      })
-      setError(false)
-      return () => {
-        socket.off("nuseif")
-        socket.disconnect()
-      }
     }
-    getCookies()
+    fetchUsers()
+      // const socket: Socket = io("http://localhost:5000", {
+      //  transports: ["websocket", "polling"] 
+      // })
+      // setError(false)
+      // return () => {
+      //   socket.disconnect()
+      // }
   },[])
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 flex justify-center items-center">
-        <p>{txt}</p>
       {error ?
       <h1>404 USER NOT FOUND</h1>
       :
@@ -89,6 +81,7 @@ const rankBoard = () => {
         </div> */}
       </div>
     }
+    <Toaster/>
       </div>
   )
 }
