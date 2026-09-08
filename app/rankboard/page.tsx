@@ -3,30 +3,40 @@
 import { useEffect, useState } from "react"
 import Cookies from "../components/cookies"
 import { useRouter } from "next/navigation"
-import { io } from "socket.io-client"
+import { io, Socket } from "socket.io-client"
 
 const rankBoard = () => {
   const router = useRouter()
   const [error, setError] = useState(false)
-  async function getCookies(){
-    const cookie = await Cookies()
-    if (cookie.cookie == "404 USER NOT FOUND"){
-      router.push("/error")
-      setError(true)
-      return
-    }
-    const socket = io("http://localhost:5000", {
-      extraHeaders: {
-        Authorization: `Bearer ${cookie.cookie}`
-      }
-    })
-    setError(false)
-  }
+  const [txt, setTxt] = useState("loading")
   useEffect(()=>{
-   getCookies()
+    async function getCookies(){
+      const cookie = await Cookies()
+      if (cookie.cookie == "404 USER NOT FOUND"){
+        router.push("/error")
+        setError(true)
+        return
+      }
+      const socket: Socket = io("http://localhost:5000", {
+        extraHeaders: {
+          Authorization: `Bearer ${cookie.cookie}`
+        },
+        transports: ["websocket", "polling"]
+      })
+      socket.on("nuseif", (data: string) => {
+        setTxt(data)
+      })
+      setError(false)
+      return () => {
+        socket.off("nuseif")
+        socket.disconnect()
+      }
+    }
+    getCookies()
   },[])
   return (
-      <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 flex justify-center items-center">
+    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 flex justify-center items-center">
+        <p>{txt}</p>
       {error ?
       <h1>404 USER NOT FOUND</h1>
       :
@@ -37,7 +47,6 @@ const rankBoard = () => {
         <h1 className="text-3xl font-bold tracking-wide">Leaderboard</h1>
         <p className="text-indigo-200 text-sm mt-1">Top performers of the month</p>
         </div>
-        
         {/* <div className="p-6">
         <ul className="space-y-3">
             {leaderboardData.map((player) => (
