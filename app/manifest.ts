@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Leaderboard',
-    short_name: 'ranking',
+    short_name: 'Leaderboard',
     description: 'Leaderboard system builded for haxsora',
     start_url: '/',
     display: 'standalone',
