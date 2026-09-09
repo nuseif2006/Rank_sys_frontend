@@ -15,7 +15,7 @@ const userFetch = async () => {
         })
         if (!res.ok) return {success: false, message: "Error occured"}
         const data = await res.json()
-        return {success: true, message: data.data, user: data.user}
+        return {success: true, message: data.user}
     }
     catch{
         return {success: false, message: "Error occured"}
