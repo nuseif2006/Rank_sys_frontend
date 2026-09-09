@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation" // Import for navigation
 import taskFetch from "../components/taskfetch"
 import Header from '../components/header'
 import toast, { Toaster } from "react-hot-toast"
+import taskUpdate from "../components/taskupdate"
 
 const TaskPage = () => {
   const router = useRouter()
@@ -39,6 +40,15 @@ const TaskPage = () => {
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     )
+  }
+  const submitScore = async () => {
+    setSubmit(true)
+    const totalExp = tasks
+      .filter((task) => task.completed)
+      .reduce((sum, task) => sum + Number(task.exp), 0)
+    const totalExpString = totalExp.toString()
+    const res =await taskUpdate({score: totalExpString})
+    if (!res.success) return toast.error(res.message, {id: "error-100"})
   }
   return (
     <main>
@@ -79,7 +89,7 @@ const TaskPage = () => {
           ))
         }
         {tasks.length > 0 && tasks.every((task) => task.completed) && (
-  <button className="btn btn-success" onClick={() => setSubmit(true)}>
+  <button className="btn btn-success" onClick={submitScore}>
     Submit
   </button>
 )}

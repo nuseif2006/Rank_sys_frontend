@@ -20,13 +20,8 @@ export default function RankBoardContent() {
   const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
-    let socket: Socket | null = null
-    let active = true
-
     const initSocketAndFetch = async () => {
       const res = await userFetch()
-      if (!active) return
-
       if (!res?.success) {
         setError(true)
         toast.error("Something went wrong", { id: "auth-error5" })
@@ -35,22 +30,21 @@ export default function RankBoardContent() {
       }
 
       setError(false)
-      socket = io("http://localhost:5000")
+      const socket: Socket = io("http://localhost:5000")
       socket.on("users", (data: User[]) => {
-        if (active) setUsers(data)
+        if (data){
+          const sortedData = [...data].sort((a,b) => Number(b.score) - Number(a.score))
+          setUsers(sortedData)
+        }
       })
-    }
-
-    initSocketAndFetch()
-
-    return () => {
-      active = false
-      if (socket) {
-        socket.off("users")
-        socket.disconnect()
+      return () => {
+          socket.off("users")
+          socket.disconnect()
       }
     }
-  }, [router])
+    initSocketAndFetch()
+
+  }, [])
 
   if (error) return null
 
@@ -66,12 +60,10 @@ export default function RankBoardContent() {
         </div>
         <div className="p-6">
           <ul className="space-y-3">
-            {users.map((user, index) => (
+            {users.map((user) => (
               <li
-                key={user.id || index}
-                className={`flex items-center justify-between p-4 rounded-xl transition duration-200 hover:scale-[1.01] ${
-                  index < 3 ? 'bg-indigo-50/50 border border-indigo-100' : 'bg-gray-50'
-                }`}
+                key={user.id}
+                className={`flex items-center justify-between p-4 rounded-xl transition duration-200 hover:scale-[1.01]`}
               >
                 <div className="flex items-center space-x-4">
                   <h3 className="font-semibold text-gray-800 text-sm sm:text-base">
