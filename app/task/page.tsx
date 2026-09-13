@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation" // Import for navigation
 import taskFetch from "../components/taskfetch"
-import HeaderTwo from "../components/headerTwo"
+import Header from "../components/header"
 import toast, { Toaster } from "react-hot-toast"
 import taskUpdate from "../components/taskupdate"
 
@@ -52,7 +52,7 @@ const TaskPage = () => {
   }
   return (
     <main>
-      <HeaderTwo/>
+      <Header/>
     <div className="space-y-4 mt-30">
       {submit ?
       <button onClick={() => router.push("/rankboard")} className="btn block mx-auto">Go to Leaderboard</button>
