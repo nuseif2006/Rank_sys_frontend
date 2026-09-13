@@ -31,6 +31,10 @@ const Register = () => {
         setLoading(false)
         return toast.error("Email should be in correct format", {id: "invalid-email"})
     }
+    else if (pass.length < 6){
+        setLoading(false)
+        return toast.error("Password is short, min 6 characters", {id: "invalid-pass"})
+    }
     const res = await fetchReg({fname, lname, email, pass})
     if (res.success){
       setLoading(false)
