@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 
 const btnLogin = async (payload: { email: string; pass: string }) => {
   try {
-    const res = await fetch("http://localhost:5000/auth/login", {
+    const res = await fetch("https://rank-sys-backend.vercel.app/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

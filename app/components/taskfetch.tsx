@@ -6,7 +6,7 @@ const taskFetch = async () => {
     try{
         const cookieStore= await cookies()
         const sessionCookie = cookieStore.get("rt")
-        const res = await fetch("http://localhost:5000/tasks",{
+        const res = await fetch("https://rank-sys-backend.vercel.app/tasks",{
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${sessionCookie?.value}`,

@@ -1,7 +1,7 @@
 "use server"
 
 const Forgot = async (payload : {email: string}) => {
-  const res = await fetch("http://localhost:5000/forgot", {
+  const res = await fetch("https://rank-sys-backend.vercel.app/forgot", {
     "method": "POST",
     "headers": {"Content-Type": "application/json"},
     body: JSON.stringify(payload)

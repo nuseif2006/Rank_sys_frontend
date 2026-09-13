@@ -9,7 +9,7 @@ const Del = async () => {
         return {success: false, msg: "Something went wrong"}
     }
 try{
-    const res = await fetch("http://localhost:5000/delete/user",{
+    const res = await fetch("https://rank-sys-backend.vercel.app/delete/user",{
       method: "DELETE",
       headers: {
           "Authorization": `Bearer ${sessionCookie?.value}`,

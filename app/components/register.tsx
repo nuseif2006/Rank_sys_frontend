@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 
 const fetchReg = async (payload : {fname: string, lname: string, email: string, pass: string}) => {
   try{
-      const res = await fetch("http://localhost:5000/auth/register", {
+      const res = await fetch("https://rank-sys-backend.vercel.app/auth/register", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)

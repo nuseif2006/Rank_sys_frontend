@@ -6,7 +6,7 @@ const userFetch = async () => {
     try{
         const cookieStore= await cookies()
         const sessionCookie = cookieStore.get("rt")
-        const res = await fetch("http://localhost:5000/rank",{
+        const res = await fetch("https://rank-sys-backend.vercel.app/rank",{
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${sessionCookie?.value}`,
