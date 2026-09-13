@@ -26,7 +26,6 @@ export default function Home() {
     }
     const res = await btnLogin({email, pass})
     if (res.success){
-      toast.success(res.message)
       localStorage.setItem("data", "task")
       setLoading(false)
       return router.replace("/task")
