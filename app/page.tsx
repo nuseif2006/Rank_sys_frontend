@@ -56,8 +56,8 @@ export default function Home() {
         />
       </div>
 
-      <div className="mt-3 mx-50 text-right">
-          <LoginHelpButton />
+      <div className="absolute top-4 right-4 z-20">
+        <LoginHelpButton />
       </div>
       <div className="hero min-h-screen relative z-10">
         <div className="hero-content flex-col lg:flex-row-reverse">

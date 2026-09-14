@@ -12,7 +12,7 @@ export default function LoginHelpButton() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors focus:outline-none focus:underline"
+        className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-gray-200 transition-colors focus:outline-none focus:underline"
         aria-expanded={isOpen}
       >
         <HelpCircle className="w-4 h-4 text-gray-400" />
@@ -24,12 +24,12 @@ export default function LoginHelpButton() {
         <>
           {/* Backdrop to close when clicking outside */}
           <div 
-            className="fixed inset-0 z-40 bg-black/10 sm:bg-transparent" 
+            className="fixed inset-0 z-40 bg-black/10" 
             onClick={() => setIsOpen(false)} 
           />
 
-          {/* Help Box Content */}
-          <div className="absolute right-0 sm:left-0 top-7 z-50 w-72 rounded-lg bg-white p-4 shadow-xl ring-1 ring-black/10 border border-gray-100 transition-all">
+          {/* Help Box Content (Aligned right so it stays on screen) */}
+          <div className="absolute right-0 top-8 z-50 w-72 sm:w-80 rounded-lg bg-white p-4 shadow-xl ring-1 ring-black/10 border border-gray-100 transition-all">
             <div className="flex items-start justify-between pb-2 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-indigo-600" />
