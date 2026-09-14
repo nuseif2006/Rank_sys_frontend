@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import btnLogin from "./components/login";
 import Image from "next/image";
 import upImg from '@/public/up.jpg';
+import LoginHelpButton from "./components/loginHelpButton";
 
 export default function Home() {
   const router = useRouter()
@@ -55,6 +56,9 @@ export default function Home() {
         />
       </div>
 
+      <div className="mt-3 mx-50 text-right">
+          <LoginHelpButton />
+      </div>
       <div className="hero min-h-screen relative z-10">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
