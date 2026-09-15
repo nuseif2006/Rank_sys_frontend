@@ -6,6 +6,7 @@ import { io, Socket } from "socket.io-client"
 import userFetch from "./userfetch"
 import toast, { Toaster } from "react-hot-toast"
 import HeaderTwo from "./headerTwo"
+import Skeleton from "react-loading-skeleton"
 
 interface User {
   id: string
@@ -18,8 +19,10 @@ export default function RankBoardContent() {
   const router = useRouter()
   const [error, setError] = useState(false)
   const [users, setUsers] = useState<User[]>([])
+  const [skeleton, setSkeleton] = useState(false)
 
   useEffect(() => {
+    setSkeleton(true)
     let socket: Socket | null = null
 
     const initSocketAndFetch = async () => {
@@ -45,6 +48,7 @@ export default function RankBoardContent() {
       socket.on("users", (data: User[]) => {
         if (data) {
           const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
+          setSkeleton(false)
           setUsers(sortedData)
         }
       })
@@ -78,9 +82,15 @@ export default function RankBoardContent() {
           </div>
           <div className="p-6">
             <ul className="space-y-3">
+              {skeleton ?
+              <div className="flex justify-center items-center w-full min-h-[200px]">
+                <span className="loading loading-bars loading-xl"></span>
+              </div>
+              :
+              <> 
               {users.map((user) => (
                 <li
-                  key={user.id}
+                key={user.id}
                   className="flex items-center justify-between p-4 rounded-xl transition duration-200 hover:scale-[1.01]"
                 >
                   <div className="flex items-center space-x-4">
@@ -95,6 +105,7 @@ export default function RankBoardContent() {
                   </div>
                 </li>
               ))}
+              </>}
             </ul>
           </div>
         </div>

@@ -6,6 +6,7 @@ import taskFetch from "../components/taskfetch"
 import Header from "../components/header"
 import toast, { Toaster } from "react-hot-toast"
 import taskUpdate from "../components/taskupdate"
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 
 const TaskPage = () => {
   const router = useRouter()
@@ -17,8 +18,10 @@ const TaskPage = () => {
   completed: boolean;
   }
   const [tasks, setTasks] = useState<Task[]>([])
+  const [skeleton, setSkeleton] = useState(false)
 
   useEffect(()=>{
+    setSkeleton(true)
     const fetchTasks = async () => {
       const res = await taskFetch()
       if(!res.success){
@@ -30,6 +33,7 @@ const TaskPage = () => {
         ...task,
         completed: task.completed || false,
       }))
+      setSkeleton(false)
       setTasks(formattedTasks)
     }
     fetchTasks()
@@ -61,6 +65,12 @@ const TaskPage = () => {
         <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
           Today's tasks
         </li>
+        {skeleton ?
+          <div className="flex justify-center items-center w-full min-h-[200px]">
+            <span className="loading loading-bars loading-xl"></span>
+          </div>
+          :
+          <>
         {
           tasks.map((task) => (
             <li className="list-row flex items-center justify-between p-3" key={task["id"]}>
@@ -88,15 +98,19 @@ const TaskPage = () => {
             </li>
           ))
         }
+        </>
+      }
         {tasks.length > 0 && tasks.every((task) => task.completed) && (
-  <button className="btn btn-success" onClick={submitScore}>
+          <button className="btn btn-success" onClick={submitScore}>
     Submit
   </button>
 )}
-      </ul>
+
+</ul>
 }
     </div>
     <Toaster/>
+    <SkeletonTheme/>
         </main>
   )
 }
