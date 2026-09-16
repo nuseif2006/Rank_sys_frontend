@@ -18,11 +18,12 @@ export default function RankBoardContent() {
   const router = useRouter()
   const [error, setError] = useState(false)
   const [users, setUsers] = useState<User[]>([])
-  const [skeleton, setSkeleton] = useState(false)
+  const [skeleton, setSkeleton] = useState(true)
 
   useEffect(() => {
-    setSkeleton(true)
-    const initSocketAndFetch = async () => {
+    let socket: Socket | null = null
+
+    const init = async () => {
       const res = await userFetch()
       if (!res?.success) {
         setError(true)
@@ -33,18 +34,27 @@ export default function RankBoardContent() {
 
       setError(false)
 
-      const socket: Socket = io("https://rank-sys-backend.vercel.app")
-      socket.on("users", (data: User[]) => {
-          const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
-          setSkeleton(false)
-          setUsers(sortedData)
+      // Connect socket with explicit WebSocket transport
+      socket = io("https://your-dedicated-backend-server.com", {
+        transports: ["websocket"],
       })
-      return () => {
+
+      socket.on("users", (data: User[]) => {
+        const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
+        setSkeleton(false)
+        setUsers(sortedData)
+      })
+    }
+
+    init()
+
+    // Proper React useEffect cleanup
+    return () => {
+      if (socket) {
         socket.disconnect()
       }
     }
-    initSocketAndFetch()
-  }, [])
+  }, [router])
 
   if (error) return null
 
@@ -59,30 +69,29 @@ export default function RankBoardContent() {
           </div>
           <div className="p-6">
             <ul className="space-y-3">
-              {skeleton ?
-              <div className="flex justify-center items-center w-full min-h-[200px]">
-                <span className="loading loading-bars loading-xl"></span>
-              </div>
-              :
-              <> 
-              {users.map((user) => (
-                <li
-                key={user.id}
-                  className="flex items-center justify-between p-4 rounded-xl transition duration-200 hover:scale-[1.01]"
-                >
-                  <div className="flex items-center space-x-4">
-                    <h3 className="font-semibold text-sm sm:text-base">
-                    {user.fname} {user.lname}
-                    </h3>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-bold text-indigo-600 text-base sm:text-lg">
-                      {user.score} XP
-                    </span>
-                  </div>
-                </li>
-              ))}
-              </>}
+              {skeleton ? (
+                <div className="flex justify-center items-center w-full min-h-[200px]">
+                  <span className="loading loading-bars loading-xl"></span>
+                </div>
+              ) : (
+                users.map((user) => (
+                  <li
+                    key={user.id}
+                    className="flex items-center justify-between p-4 rounded-xl transition duration-200 hover:scale-[1.01]"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <h3 className="font-semibold text-sm sm:text-base">
+                        {user.fname} {user.lname}
+                      </h3>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-bold text-indigo-600 text-base sm:text-lg">
+                        {user.score} XP
+                      </span>
+                    </div>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
         </div>
