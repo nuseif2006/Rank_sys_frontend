@@ -35,21 +35,16 @@ export default function RankBoardContent() {
 
       const socket: Socket = io("https://rank-sys-backend.vercel.app")
       socket.on("users", (data: User[]) => {
-        if (data) {
           const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
           setSkeleton(false)
           setUsers(sortedData)
-        }
       })
       return () => {
-        if (socket) {
-          socket.off("users")
-          socket.disconnect()
-        }
+        socket.disconnect()
       }
     }
     initSocketAndFetch()
-  }, [router])
+  }, [])
 
   if (error) return null
 
