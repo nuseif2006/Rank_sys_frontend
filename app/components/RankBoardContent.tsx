@@ -6,7 +6,6 @@ import { io, Socket } from "socket.io-client"
 import userFetch from "./userfetch"
 import toast, { Toaster } from "react-hot-toast"
 import HeaderTwo from "./headerTwo"
-import Skeleton from "react-loading-skeleton"
 
 interface User {
   id: string
@@ -23,8 +22,6 @@ export default function RankBoardContent() {
 
   useEffect(() => {
     setSkeleton(true)
-    let socket: Socket | null = null
-
     const initSocketAndFetch = async () => {
       const res = await userFetch()
       if (!res?.success) {
@@ -36,15 +33,7 @@ export default function RankBoardContent() {
 
       setError(false)
 
-      // 1. Force websocket/polling transport configuration
-      socket = io("https://rank-sys-backend.vercel.app", {
-        transports: ["websocket", "polling"],
-      })
-
-      socket.on("connect", () => {
-        console.log("Socket connected:", socket?.id)
-      })
-
+      const socket: Socket = io("https://rank-sys-backend.vercel.app")
       socket.on("users", (data: User[]) => {
         if (data) {
           const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
@@ -52,21 +41,14 @@ export default function RankBoardContent() {
           setUsers(sortedData)
         }
       })
-
-      socket.on("connect_error", (err) => {
-        console.error("Socket connection error:", err.message)
-      })
-    }
-
-    initSocketAndFetch()
-
-    // 2. Properly return the cleanup function directly from useEffect
-    return () => {
-      if (socket) {
-        socket.off("users")
-        socket.disconnect()
+      return () => {
+        if (socket) {
+          socket.off("users")
+          socket.disconnect()
+        }
       }
     }
+    initSocketAndFetch()
   }, [router])
 
   if (error) return null
