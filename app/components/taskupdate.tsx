@@ -1,7 +1,6 @@
 "use server"
 
 import { cookies } from "next/headers"
-import {socket} from "./RankBoardContent"
 
 const taskUpdate = async (payload: {score: string}) => {
     try{
@@ -16,7 +15,6 @@ const taskUpdate = async (payload: {score: string}) => {
             body: JSON.stringify(payload)
         })
         if (!res.ok) return {success: false, message: "Error occured"}
-        socket.emit("updateScore")
         return {success: true, message: "Message updated successfuly"}
     }
     catch{

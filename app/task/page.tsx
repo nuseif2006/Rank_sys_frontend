@@ -6,7 +6,7 @@ import taskFetch from "../components/taskfetch"
 import Header from "../components/header"
 import toast, { Toaster } from "react-hot-toast"
 import taskUpdate from "../components/taskupdate"
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
+import {socket} from "../components/RankBoardContent"
 
 const TaskPage = () => {
   const router = useRouter()
@@ -51,6 +51,7 @@ const TaskPage = () => {
       .filter((task) => task.completed)
       .reduce((sum, task) => sum + Number(task.exp), 0)
     const totalExpString = totalExp.toString()
+    socket.emit("updateScore")
     const res =await taskUpdate({score: totalExpString})
     if (!res.success) return toast.error(res.message, {id: "error-100"})
   }
@@ -110,7 +111,6 @@ const TaskPage = () => {
 }
     </div>
     <Toaster/>
-    <SkeletonTheme/>
         </main>
   )
 }
