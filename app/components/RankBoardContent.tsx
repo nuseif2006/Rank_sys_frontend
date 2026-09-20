@@ -14,6 +14,12 @@ interface User {
   score: string
 }
 
+export const socket: Socket = io("https://your-dedicated-backend-server.com", {
+    transports: ["websocket"],
+    autoConnect: true
+})
+
+
 export default function RankBoardContent() {
   const router = useRouter()
   const [error, setError] = useState(false)
@@ -21,8 +27,6 @@ export default function RankBoardContent() {
   const [skeleton, setSkeleton] = useState(true)
 
   useEffect(() => {
-    let socket: Socket | null = null
-
     const init = async () => {
       const res = await userFetch()
       if (!res?.success) {
@@ -31,13 +35,7 @@ export default function RankBoardContent() {
         router.back()
         return
       }
-
       setError(false)
-
-      // Connect socket with explicit WebSocket transport
-      socket = io("https://your-dedicated-backend-server.com", {
-        transports: ["websocket"],
-      })
 
       socket.on("users", (data: User[]) => {
         const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
@@ -45,16 +43,12 @@ export default function RankBoardContent() {
         setUsers(sortedData)
       })
     }
-
     init()
-
-    // Proper React useEffect cleanup
     return () => {
-      if (socket) {
-        socket.disconnect()
-      }
+      socket.off("users")
+      socket.disconnect()
     }
-  }, [router])
+  }, [])
 
   if (error) return null
 
