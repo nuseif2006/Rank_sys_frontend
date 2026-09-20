@@ -37,6 +37,9 @@ export default function RankBoardContent() {
       }
       setError(false)
 
+      if (!socket.connected) {
+        socket.connect()
+      }
       socket.on("users", (data: User[]) => {
         const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
         setSkeleton(false)
@@ -46,9 +49,8 @@ export default function RankBoardContent() {
     init()
     return () => {
       socket.off("users")
-      socket.disconnect()
     }
-  }, [])
+  }, [router])
 
   if (error) return null
 
