@@ -14,7 +14,7 @@ interface User {
   score: string
 }
 
-export const socket: Socket = io("https://your-dedicated-backend-server.com", {
+export const socket: Socket = io("https://rank-sys-backend.vercel.app", {
     transports: ["websocket"],
     autoConnect: true
 })
