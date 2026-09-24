@@ -40,7 +40,6 @@ export default function RankBoardContent() {
     })
     return () => {
       socket.off("users")
-      socket.off("users1")
       socket.disconnect()
     }
   }, [])
