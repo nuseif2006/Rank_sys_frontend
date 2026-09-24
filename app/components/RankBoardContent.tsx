@@ -14,12 +14,6 @@ interface User {
   score: string
 }
 
-export const socket: Socket = io("https://rank-sys-backend.vercel.app", {
-    transports: ["websocket"],
-    autoConnect: true
-})
-
-
 export default function RankBoardContent() {
   const router = useRouter()
   const [error, setError] = useState(false)
@@ -36,21 +30,19 @@ export default function RankBoardContent() {
         return
       }
       setError(false)
-
-      if (!socket.connected) {
-        socket.connect()
-      }
-      socket.on("users", (data: User[]) => {
+    }
+    init()
+    const socket = io("https://rank-sys-backend.vercel.app")
+    socket.on("users", (data: User[]) => {
         const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
         setSkeleton(false)
         setUsers(sortedData)
-      })
-    }
-    init()
+    })
     return () => {
       socket.off("users")
+      socket.disconnect()
     }
-  }, [router])
+  }, [])
 
   if (error) return null
 
