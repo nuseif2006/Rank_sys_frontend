@@ -6,7 +6,6 @@ import taskFetch from "../components/taskfetch"
 import Header from "../components/header"
 import toast, { Toaster } from "react-hot-toast"
 import taskUpdate from "../components/taskupdate"
-import { io } from "socket.io-client"
 
 const TaskPage = () => {
   const router = useRouter()
@@ -52,8 +51,6 @@ const TaskPage = () => {
     .reduce((sum, task) => sum + Number(task.exp), 0)
     const totalExpString = totalExp.toString()
     const res =await taskUpdate({score: totalExpString})
-    const socket = io("https://rank-sys-backend.vercel.app")
-    socket.emit("updateScore")
     if (!res.success) return toast.error(res.message, {id: "error-100"})
   }
   return (
