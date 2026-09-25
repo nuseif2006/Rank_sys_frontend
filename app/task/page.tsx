@@ -46,14 +46,14 @@ const TaskPage = () => {
     )
   }
   const submitScore = async () => {
-    const socket = io("https://rank-sys-backend.vercel.app")
-    socket.emit("updateScore")
     setSubmit(true)
     const totalExp = tasks
-      .filter((task) => task.completed)
-      .reduce((sum, task) => sum + Number(task.exp), 0)
+    .filter((task) => task.completed)
+    .reduce((sum, task) => sum + Number(task.exp), 0)
     const totalExpString = totalExp.toString()
     const res =await taskUpdate({score: totalExpString})
+    const socket = io("https://rank-sys-backend.vercel.app")
+    socket.emit("updateScore")
     if (!res.success) return toast.error(res.message, {id: "error-100"})
   }
   return (
