@@ -33,6 +33,7 @@ export default function RankBoardContent() {
     }
     init()
     const socket = io("https://rank-sys-backend.vercel.app")
+    socket.emit("updateScore")
     socket.on("users", (data: User[]) => {
         const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
         setSkeleton(false)
