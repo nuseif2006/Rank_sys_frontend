@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { io, Socket } from "socket.io-client"
 import userFetch from "./userfetch"
 import toast, { Toaster } from "react-hot-toast"
 import HeaderTwo from "./headerTwo"
+import { io } from "socket.io-client"
+const socket = io("http://localhost:5000")
 
 interface User {
   id: string
@@ -32,18 +33,13 @@ export default function RankBoardContent() {
       setError(false)
     }
     init()
-    const socket = io("https://rank-sys-backend.vercel.app")
     socket.emit("updateScore")
     socket.on("users", (data: User[]) => {
         const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
         setSkeleton(false)
         setUsers(sortedData)
     })
-    return () => {
-      socket.off("users")
-      socket.disconnect()
-    }
-  }, [])
+  }, [socket])
 
   if (error) return null
 
