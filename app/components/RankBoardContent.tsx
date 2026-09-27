@@ -22,7 +22,6 @@ export default function RankBoardContent() {
   const [skeleton, setSkeleton] = useState(true)
 
   useEffect(() => {
-    socket.emit("updateScore")
     const init = async () => {
       const res = await userFetch()
       if (!res?.success) {
@@ -32,13 +31,14 @@ export default function RankBoardContent() {
         return
       }
       setError(false)
+      socket.emit("updateScore")
+      socket.on("users", (data: User[]) => {
+          const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
+          setSkeleton(false)
+          setUsers(sortedData)
+      })
     }
     init()
-    socket.on("users", (data: User[]) => {
-        const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
-        setSkeleton(false)
-        setUsers(sortedData)
-    })
   }, [socket])
 
   if (error) return null
