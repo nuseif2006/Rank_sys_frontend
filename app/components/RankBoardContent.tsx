@@ -31,14 +31,15 @@ export default function RankBoardContent() {
         return
       }
       setError(false)
-      socket.emit("updateScore")
-      socket.on("users", (data: User[]) => {
-          const sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
-          setSkeleton(false)
-          setUsers(sortedData)
-      })
     }
     init()
+    let sortedData
+    socket.emit("updateScore")
+    socket.on("users", (data: User[]) => {
+        sortedData = [...data].sort((a, b) => Number(b.score) - Number(a.score))
+        setSkeleton(false)
+        setUsers(sortedData)
+    })
   }, [socket])
 
   if (error) return null

@@ -53,8 +53,8 @@ const TaskPage = () => {
     .reduce((sum, task) => sum + Number(task.exp), 0)
     const totalExpString = totalExp.toString()
     const res =await taskUpdate({score: totalExpString})
-    socket.emit("updateScore")
     if (!res.success) return toast.error(res.message, {id: "error-100"})
+    socket.emit("updateScore")
   }
   return (
     <main>
