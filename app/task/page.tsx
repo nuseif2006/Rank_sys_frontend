@@ -7,7 +7,7 @@ import Header from "../components/header"
 import toast, { Toaster } from "react-hot-toast"
 import taskUpdate from "../components/taskupdate"
 import { io } from "socket.io-client"
-const socket = io("http://localhost:5000")
+const socket = io("https://rank-sys-backend.vercel.app")
 
 const TaskPage = () => {
   const router = useRouter()

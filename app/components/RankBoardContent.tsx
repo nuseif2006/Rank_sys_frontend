@@ -6,7 +6,7 @@ import userFetch from "./userfetch"
 import toast, { Toaster } from "react-hot-toast"
 import HeaderTwo from "./headerTwo"
 import { io } from "socket.io-client"
-const socket = io("http://localhost:5000")
+const socket = io("https://rank-sys-backend.vercel.app")
 
 interface User {
   id: string
