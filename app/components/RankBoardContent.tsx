@@ -71,9 +71,7 @@ export default function RankBoardContent() {
                       </h3>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-indigo-600 text-base sm:text-lg">
                         {user.score} XP
-                      </span>
                     </div>
                   </li>
                 ))
