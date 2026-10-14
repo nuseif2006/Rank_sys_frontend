@@ -15,10 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Leaderboard",
   description: "Leaderboard system",
-  icons: {icon: "favicon.png", apple: "favicon.png"},
-  verification: {
-    google: "ZeveDEpB2vWRRW7hBHOWR8ofDzBu-M555rlB_CatS1A"
-  }
+  icons: {icon: "favicon.png", apple: "favicon.png"}
 };
 
 export const viewport: Viewport = {
@@ -34,6 +31,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+    <head>
+      <meta name="google-site-verification" content="ZeveDEpB2vWRRW7hBHOWR8ofDzBu-M555rlB_CatS1A" />
+    </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
