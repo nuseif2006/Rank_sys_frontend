@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Leaderboard",
   description: "Leaderboard system",
-  icons: {icon: "favicon.png", apple: "favicon.png"}
+  icons: {icon: "favicon.png", apple: "favicon.png"},
+  verification: {
+    google: "ZeveDEpB2vWRRW7hBHOWR8ofDzBu-M555rlB_CatS1A"
+  }
 };
 
 export const viewport: Viewport = {
